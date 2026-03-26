@@ -1,2 +1,2 @@
-github_org  = "mwiewior"
-github_repo = "tbd-workshop-2"
+github_org  = "adecku"
+github_repo = "tbd-workshop-1"
