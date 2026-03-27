@@ -23,7 +23,9 @@ RUN apt-get -y update && \
 ENV PATH=/usr/bin:/usr/local/bin:$PATH
 ## use JUPYTERLAB_VERSION to pin jupyterlab version
 #FIXME:unpin jupyterlab version
-RUN pip3 install --no-cache-dir --upgrade pip
+
+RUN pip3 install --no-cache-dir pip==23.3.1
+
 RUN pip3 install --no-cache-dir \
         jupyterlab==$JUPYTERLAB_VERSION \
         pyspark==$SPARK_VERSION \

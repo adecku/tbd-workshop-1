@@ -31,7 +31,10 @@ ENV PYTHONIOENCODING=utf-8
 ENV LANG=C.UTF-8
 
 # Update python and install packages
-RUN pip install --upgrade pip setuptools wheel --no-cache-dir \
+RUN pip install --no-cache-dir \
+  pip==23.3.1 \
+  setuptools==68.2.2 \
+  wheel==0.41.2 \
   dbt-core==$DBT_VERSION \
   dbt-spark==$DBT_SPARK_VERSION \
   pyspark==$SPARK_VERSION
