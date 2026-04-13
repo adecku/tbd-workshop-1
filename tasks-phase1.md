@@ -39,15 +39,27 @@ img.png
       "module.dataproc.google_storage_bucket_iam_member.temp_bucket_iam" [label="google_storage_bucket_iam_member.temp_bucket_iam"];
     }
   ```
+  The dataproc module is responsible for setting up a data processing environment in Google Cloud. It creates a Dataproc cluster that can run Spark jobs, along with a service account that has permissions to access resources like BigQuery and Cloud Storage. The module also creates two GCS buckets for staging and temporary data used during job execution. Additionally, it enables the Dataproc API required for the cluster to function. Overall, the module prepares all components needed to process data in the cloud.
 6. Reach YARN UI
   ***place the command you used for setting up the tunnel, the port and the screenshot of YARN UI here***
    Hint: the Dataproc cluster has `internal_ip_only = true`, so you need to use an IAP tunnel.
    See: `gcloud compute ssh` with `-- -L <local_port>:localhost:<remote_port>` and `--tunnel-through-iap` flag.
-   YARN ResourceManager UI runs on port **8088**.
+   YARN ResourceManager UI runs on port **8088**.  
+  Command used for setting up the tunnel:  
+  ```
+  gcloud compute ssh tbd-cluster-m  
+    --zone europe-west1-b  
+    --tunnel-through-iap  
+    -- -L 18088:tbd-cluster-m:8088  
+  Port: 18088  
+  ```
+  Screenshot of YARN UI:  
+  ![YARN UI](task1/6yarm_ui.png)
 7. Draw an architecture diagram (e.g. in draw.io) that includes:
   1. Description of the components of service accounts
   2. List of buckets for disposal
-    *place your diagram here***
+    Diagram:
+    ![Architekture diagram](task1/7draw_io.png)
 8. Create a new PR and add costs by entering the expected consumption into Infracost
 
 For all the resources of type: `google_artifact_registry_repository`, `google_storage_bucket`
