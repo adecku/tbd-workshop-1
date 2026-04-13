@@ -22,7 +22,7 @@ img.png
     *place the screenshot from GA after successful application of release***
 5. Analyze terraform code. Play with terraform plan, terraform graph to investigate different modules.
   ***describe one selected module and put the output of terraform graph for this module here***  
-  Graph for dataproc module:   
+  Graph for the dataproc module:   
   ```subgraph "cluster_module.dataproc" {
   subgraph "cluster_module.dataproc" {
       label = "module.dataproc"
@@ -39,19 +39,16 @@ img.png
       "module.dataproc.google_storage_bucket_iam_member.temp_bucket_iam" [label="google_storage_bucket_iam_member.temp_bucket_iam"];
     }
   ```
-
-
-
-1. Reach YARN UI
+6. Reach YARN UI
   ***place the command you used for setting up the tunnel, the port and the screenshot of YARN UI here***
    Hint: the Dataproc cluster has `internal_ip_only = true`, so you need to use an IAP tunnel.
    See: `gcloud compute ssh` with `-- -L <local_port>:localhost:<remote_port>` and `--tunnel-through-iap` flag.
    YARN ResourceManager UI runs on port **8088**.
-2. Draw an architecture diagram (e.g. in draw.io) that includes:
+7. Draw an architecture diagram (e.g. in draw.io) that includes:
   1. Description of the components of service accounts
   2. List of buckets for disposal
     *place your diagram here***
-3. Create a new PR and add costs by entering the expected consumption into Infracost
+8. Create a new PR and add costs by entering the expected consumption into Infracost
 
 For all the resources of type: `google_artifact_registry_repository`, `google_storage_bucket`
 create a sample usage profiles and add it to the Infracost task in CI/CD pipeline. Usage file [example](https://github.com/infracost/infracost/blob/master/infracost-usage-example.yml)
