@@ -13,7 +13,7 @@ img.png
 
 1. Authors:
   ***Group number 14***
-  https://github.com/adecku/tbd-workshop-1
+  [https://github.com/adecku/tbd-workshop-1](https://github.com/adecku/tbd-workshop-1)
 2. Follow all steps in README.md.
 3. From available Github Actions select and run destroy on master branch.
 4. Create new git branch and:
@@ -21,7 +21,24 @@ img.png
   2. Create PR from this branch to **YOUR** master and merge it to make new release.
     *place the screenshot from GA after successful application of release***
 5. Analyze terraform code. Play with terraform plan, terraform graph to investigate different modules.
-  ***describe one selected module and put the output of terraform graph for this module here***
+  ***describe one selected module and put the output of terraform graph for this module here***  
+  Graph for the dataproc module:   
+  ```subgraph "cluster_module.dataproc" {
+  subgraph "cluster_module.dataproc" {
+      label = "module.dataproc"
+      fontname = "sans-serif"
+      "module.dataproc.google_dataproc_cluster.tbd-dataproc-cluster" [label="google_dataproc_cluster.tbd-dataproc-cluster"];
+      "module.dataproc.google_project_iam_member.dataproc_bigquery_data_editor" [label="google_project_iam_member.dataproc_bigquery_data_editor"];
+      "module.dataproc.google_project_iam_member.dataproc_bigquery_user" [label="google_project_iam_member.dataproc_bigquery_user"];
+      "module.dataproc.google_project_iam_member.dataproc_worker" [label="google_project_iam_member.dataproc_worker"];
+      "module.dataproc.google_project_service.dataproc" [label="google_project_service.dataproc"];
+      "module.dataproc.google_service_account.dataproc_sa" [label="google_service_account.dataproc_sa"];
+      "module.dataproc.google_storage_bucket.dataproc_staging" [label="google_storage_bucket.dataproc_staging"];
+      "module.dataproc.google_storage_bucket.dataproc_temp" [label="google_storage_bucket.dataproc_temp"];
+      "module.dataproc.google_storage_bucket_iam_member.staging_bucket_iam" [label="google_storage_bucket_iam_member.staging_bucket_iam"];
+      "module.dataproc.google_storage_bucket_iam_member.temp_bucket_iam" [label="google_storage_bucket_iam_member.temp_bucket_iam"];
+    }
+  ```
 6. Reach YARN UI
   ***place the command you used for setting up the tunnel, the port and the screenshot of YARN UI here***
    Hint: the Dataproc cluster has `internal_ip_only = true`, so you need to use an IAP tunnel.
@@ -43,7 +60,7 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
 1. Find and correct the error in spark-job.py
   After `terraform apply` completes, connect to the Airflow cluster:
     Then check the external IP (AIRFLOW_EXTERNAL_IP) of the webserver service:
-    kubectl get svc -n airflow airflow-webserver                                                                                                                                                                 
+    kubectl get svc -n airflow airflow-webserver  
     ▎ Note: If EXTERNAL-IP shows , wait a moment and retry — LoadBalancer IP allocation may take 1-2 minutes.  
     DAG files are synced automatically from your GitHub repo via git-sync sidecar.
     Airflow variables and the `google_cloud_default` GCP connection are also configured by Terraform.
@@ -70,9 +87,7 @@ Add a new GitHub Actions workflow that:
 
 1. runs terraform destroy -auto-approve
 2. triggers automatically:
-
-   a) on a fixed schedule (e.g. every day at 20:00 UTC)
-
+  a) on a fixed schedule (e.g. every day at 20:00 UTC)
    b) when a PR is merged to master containing [CLEANUP] tag in title
 
 Steps:
