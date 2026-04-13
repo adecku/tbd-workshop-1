@@ -22,7 +22,7 @@ img.png
     *place the screenshot from GA after successful application of release***
 5. Analyze terraform code. Play with terraform plan, terraform graph to investigate different modules.
   ***describe one selected module and put the output of terraform graph for this module here***  
-  Graph for the dataproc module:   
+  Graph for dataproc module:   
   ```subgraph "cluster_module.dataproc" {
   subgraph "cluster_module.dataproc" {
       label = "module.dataproc"
