@@ -279,6 +279,7 @@ jobs:
       continue-on-error: false
 ```
 
+
 ***paste screenshot/log snippet confirming the auto-destroy ran***
 
 ***write one sentence why scheduling cleanup helps in this workshop***
