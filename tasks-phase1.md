@@ -65,7 +65,13 @@ img.png
 For all the resources of type: `google_artifact_registry_repository`, `google_storage_bucket`
 create a sample usage profiles and add it to the Infracost task in CI/CD pipeline. Usage file [example](https://github.com/infracost/infracost/blob/master/infracost-usage-example.yml)
 
-   ***place the expected consumption you entered here***
+   Expected consumption entered into Infracost usage file:
+
+- google_artifact_registry_repository.registry: 3 GB stored
+- google_storage_bucket.tbd-code-bucket: 1 GB stored, 200 Class A ops/month, 1000 Class B ops/month, 1 GB retrieval/month, 1 GB egress/month
+- google_storage_bucket.tbd-data-bucket: 10 GB stored, 500 Class A ops/month, 3000 Class B ops/month, 5 GB retrieval/month, 2 GB egress/month
+- google_storage_bucket.dataproc_staging: 5 GB stored, 500 Class A ops/month, 2000 Class B ops/month, 2 GB retrieval/month, 1 GB egress/month
+- google_storage_bucket.dataproc_temp: 5 GB stored, 500 Class A ops/month, 2000 Class B ops/month, 2 GB retrieval/month, 1 GB egress/month
 
    ***place the screenshot from infracost output here***
 
