@@ -120,7 +120,7 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
       ```
 
       Infracost output:
-      ![infracost_estimade.png](doc\figures\infracost_estimade.png)
+      ![infracost_estimade.png](doc/figures/infracost_estimade.png)
 
 9. Find and correct the error in spark-job.py
       
