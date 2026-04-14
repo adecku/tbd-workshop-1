@@ -281,5 +281,7 @@ jobs:
 
 
 ***paste screenshot/log snippet confirming the auto-destroy ran***
+![Auto Destroy Success](doc/figures/auto-destroy-success.png)
 
 ***write one sentence why scheduling cleanup helps in this workshop***
+Ustawienie harmonogramu czyszczenia zasobów (auto-destroy) chroni nas przed nieświadomym generowaniem bardzo wysokich i niepotrzebnych kosztów w Google Cloud w przypadku, gdybyśmy sami po zakończeniu pracy zapomnieli ręcznie wyłączyć utworzoną infrastrukturę.
