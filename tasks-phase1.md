@@ -123,8 +123,6 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
       ![infracost_estimade.png](doc/figures/infracost_estimade.png)
 
 9. Find and correct the error in spark-job.py
-      
-      After `terraform apply` completes, connect to the Airflow cluster:
 
       After `terraform apply` completes, connect to the Airflow cluster:
       ```bash
@@ -141,13 +139,27 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
 
       a) In the Airflow UI ([http://AIRFLOW_EXTERNAL_IP:8080](http://AIRFLOW_EXTERNAL_IP:8080), login: admin/admin), find the `dataproc_job` DAG, unpause it and trigger it manually.
 
-      ***place a screenshot of the DAG in the Airflow UI***
+      ![airflow-ui-error.png](doc/figures/airflow-ui-error.png)
 
       b) The DAG will fail. Examine the task logs in the Airflow UI to find the root cause.
 
-      ***paste the relevant error message from the Airflow task log***
+      ```json
+      POST https://storage.googleapis.com/upload/storage/v1/b/tbd-2026l-9010-data/o?ifGenerationMatch=0&uploadType=multipart
+      {
+      "code": 404,
+      "errors": [
+         {
+            "domain": "global",
+            "message": "The specified bucket does not exist.",
+            "reason": "notFound"
+         }
+      ],
+      "message": "The specified bucket does not exist."
+      }
+      ```
 
-      ***describe what the error is and how you found it***
+      The error was caused by writing the output to a non-existing GCS bucket: `tbd-2026l-9010-data`.  
+      I found it by checking the Dataproc driver output log referenced in the Airflow task log. The detailed stack trace showed a `404 Not Found` error with the message `The specified bucket does not exist.`
 
       c) Fix the error in `modules/data-pipeline/resources/spark-job.py` and re-upload the file to GCS:
 
@@ -156,14 +168,14 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
       ```
       Then trigger the DAG again from the Airflow UI.
 
-      ***paste the link to the fixed file***
+      [Fixed spark-job.py file](modules/data-pipeline/resources/spark-job.py)
 
       d) Verify the DAG completes successfully and check that ORC files were written to the data bucket:
       ```bash
       gsutil ls gs://PROJECT_NAME-data/data/shakespeare/
       ```
 
-      ***place a screenshot of the successful DAG run in Airflow UI***
+      ![sucessfull job](doc/figures/airflow-ui-sucess.png)
 
 11. Create a BigQuery dataset and an external table using SQL
 
@@ -173,13 +185,38 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
        ```bash
       bq mk --dataset --location=europe-west1 shakespeare
       ```
-      ***place the SQL code and query output here***
+
+      Querries used in BigQuery Studio:
+
+      ```sql
+      CREATE SCHEMA IF NOT EXISTS `tbd-2026l-318786.shakespeare`
+      OPTIONS (
+      location = 'europe-west1'
+      );
+      ```
+      output: Ten zbiór danych już istnieje.
+
+      ```sql
+      CREATE OR REPLACE EXTERNAL TABLE `tbd-2026l-318786.shakespeare.shakespeare_orc_ext`
+      OPTIONS (
+      format = 'ORC',
+      uris = ['gs://tbd-2026l-318786-data/data/shakespeare/*.orc']
+      );
+      ```
+
+      output: Ta instrukcja spowodowała utworzenie tabeli o nazwie shakespeare_orc_ext.
+
 
       ***why does ORC not require a table schema?***
 
 12. Add support for preemptible/spot instances in a Dataproc cluster
 
-   ***place the link to the modified file and inserted terraform code***
+    [modules/dataproc/main.tf](modules/dataproc/main.tf)
+    ```terraform
+    preemptible_worker_config {
+      num_instances = 1
+    }
+    ```
 
 13. Triggered Terraform Destroy on Schedule or After PR Merge. Goal: make sure we never forget to clean up resources and burn money.
 
@@ -199,6 +236,48 @@ Steps:
 Hint: use the existing `.github/workflows/destroy.yml` as a starting point.
 
 ***paste workflow YAML here***
+```yaml
+name: Auto Destroy
+on:
+  schedule:
+    - cron: '0 20 * * *'
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+permissions: read-all
+
+jobs:
+  destroy-release:
+    if: github.event_name == 'schedule' || (github.event.pull_request.merged == true && contains(github.event.pull_request.title, '[CLEANUP]'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+      issues: write
+
+    steps:
+    - uses: 'actions/checkout@v3'
+    - uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.11.0
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        token_format: 'access_token'
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
+        service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
+    - name: Terraform Init
+      id: init
+      run: terraform init -backend-config=env/backend.tfvars
+    - name: Terraform Destroy
+      id: destroy
+      run: terraform destroy -no-color -var-file env/project.tfvars -auto-approve
+      continue-on-error: false
+```
 
 ***paste screenshot/log snippet confirming the auto-destroy ran***
 
