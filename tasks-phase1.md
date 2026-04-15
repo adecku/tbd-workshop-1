@@ -126,7 +126,7 @@
       ```
 
    - Infracost output:
-      ![infracost_estimade.png](doc/figures/infracost_estimade.png)
+      ![infracost_estimate.png](doc/figures/infracost_estimate.png)
 
 # 9. Find and correct the error in spark-job.py
    ## Task
