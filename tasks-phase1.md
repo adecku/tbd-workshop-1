@@ -1,87 +1,93 @@
-IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each work session. You can recreate infrastructure by creating new PR and merging it to master.
+# 1. Authors:
 
-![img.png](doc/figures/destroy.png)
+   ***Group number:*** 14
 
-## Phase 1 Exercise Overview
+   ***Link to forked repo:*** [adecku/tbd-workshop-1](https://github.com/adecku/tbd-workshop-1)
 
-   Legend
+# 2. Follow all steps in README.md.
+# 3. From available Github Actions select and run destroy on master branch.
+# 4. Create new git branch and:
+   ## Task 
+   > 1. Modify tasks-phase1.md file.
+   > 
+   > 2. Create PR from this branch to **YOUR** master and merge it to make new release.
+   >
+   > ***place the screenshot from GA after successful application of release***
 
-   - 🔵 Blue — setup steps (one-time configuration)
-   - 🟠 Orange — manual steps (GCP Console / GitHub UI)
-   - 🟢 Green — infrastructure ready
-   - 🟣 Purple — tasks to complete and document in tasks-phase1.md
-
-1. Authors:
-
-   ***Group number 14***
-
-   [https://github.com/adecku/tbd-workshop-1](https://github.com/adecku/tbd-workshop-1)
-
-2. Follow all steps in README.md.
-
-3. From available Github Actions select and run destroy on master branch.
-
-4. Create new git branch and:
-   1. Modify tasks-phase1.md file.
-
-   2. Create PR from this branch to **YOUR** master and merge it to make new release.
-
+   ## Solution
    ![release.png](doc/figures/release.png)
       
 
-5. Analyze terraform code. Play with terraform plan, terraform graph to investigate different modules.
+# 5. Analyze terraform code. Play with terraform plan, terraform graph to investigate different modules.
+   ## Task
+   > describe one selected module and put the output of terraform graph for this module here
 
-      #### Dataproc module
-      The dataproc module is responsible for setting up a data processing environment in Google Cloud. It creates a Dataproc cluster that can run Spark jobs, along with a service account that has permissions to access resources like BigQuery and Cloud Storage. The module also creates two GCS buckets for staging and temporary data used during job execution. Additionally, it enables the Dataproc API required for the cluster to function. Overall, the module prepares all components needed to process data in the cloud.
-      Graph for dataproc module:   
+   ## Solution
+   ### Dataproc module
+   The dataproc module is responsible for setting up a data processing environment in Google Cloud. It creates a Dataproc cluster that can run Spark jobs, along with a service account that has permissions to access resources like BigQuery and Cloud Storage. The module also creates two GCS buckets for staging and temporary data used during job execution. Additionally, it enables the Dataproc API required for the cluster to function. Overall, the module prepares all components needed to process data in the cloud.
+   Graph for dataproc module:   
 
-      #### Graph
-      ```subgraph "cluster_module.dataproc" {
-      subgraph "cluster_module.dataproc" {
-            label = "module.dataproc"
-            fontname = "sans-serif"
-            "module.dataproc.google_dataproc_cluster.tbd-dataproc-cluster" [label="google_dataproc_cluster.tbd-dataproc-cluster"];
-            "module.dataproc.google_project_iam_member.dataproc_bigquery_data_editor" [label="google_project_iam_member.dataproc_bigquery_data_editor"];
-            "module.dataproc.google_project_iam_member.dataproc_bigquery_user" [label="google_project_iam_member.dataproc_bigquery_user"];
-            "module.dataproc.google_project_iam_member.dataproc_worker" [label="google_project_iam_member.dataproc_worker"];
-            "module.dataproc.google_project_service.dataproc" [label="google_project_service.dataproc"];
-            "module.dataproc.google_service_account.dataproc_sa" [label="google_service_account.dataproc_sa"];
-            "module.dataproc.google_storage_bucket.dataproc_staging" [label="google_storage_bucket.dataproc_staging"];
-            "module.dataproc.google_storage_bucket.dataproc_temp" [label="google_storage_bucket.dataproc_temp"];
-            "module.dataproc.google_storage_bucket_iam_member.staging_bucket_iam" [label="google_storage_bucket_iam_member.staging_bucket_iam"];
-            "module.dataproc.google_storage_bucket_iam_member.temp_bucket_iam" [label="google_storage_bucket_iam_member.temp_bucket_iam"];
-         }
+   ### Graph
+   ```
+   subgraph "cluster_module.dataproc" {
+         label = "module.dataproc"
+         fontname = "sans-serif"
+         "module.dataproc.google_dataproc_cluster.tbd-dataproc-cluster" [label="google_dataproc_cluster.tbd-dataproc-cluster"];
+         "module.dataproc.google_project_iam_member.dataproc_bigquery_data_editor" [label="google_project_iam_member.dataproc_bigquery_data_editor"];
+         "module.dataproc.google_project_iam_member.dataproc_bigquery_user" [label="google_project_iam_member.dataproc_bigquery_user"];
+         "module.dataproc.google_project_iam_member.dataproc_worker" [label="google_project_iam_member.dataproc_worker"];
+         "module.dataproc.google_project_service.dataproc" [label="google_project_service.dataproc"];
+         "module.dataproc.google_service_account.dataproc_sa" [label="google_service_account.dataproc_sa"];
+         "module.dataproc.google_storage_bucket.dataproc_staging" [label="google_storage_bucket.dataproc_staging"];
+         "module.dataproc.google_storage_bucket.dataproc_temp" [label="google_storage_bucket.dataproc_temp"];
+         "module.dataproc.google_storage_bucket_iam_member.staging_bucket_iam" [label="google_storage_bucket_iam_member.staging_bucket_iam"];
+         "module.dataproc.google_storage_bucket_iam_member.temp_bucket_iam" [label="google_storage_bucket_iam_member.temp_bucket_iam"];
+   }
+   ```
+
+# 6. Reach YARN UI
+   ## Task
+   >***place the command you used for setting up the tunnel, the port and the screenshot of YARN UI here***
+   >
+   >Hint: the Dataproc cluster has `internal_ip_only = true`, so you need to use an IAP tunnel.
+   >See: `gcloud compute ssh` with `-- -L <local_port>:localhost:<remote_port>` and `--tunnel-through-iap` flag.
+   >YARN ResourceManager UI runs on port **8088**.
+
+   ## Solution
+   - Command used for setting up the tunnel:
+
       ```
-
-6. Reach YARN UI
-
-   ***place the command you used for setting up the tunnel, the port and the screenshot of YARN UI here***
-      Hint: the Dataproc cluster has `internal_ip_only = true`, so you need to use an IAP tunnel.
-      See: `gcloud compute ssh` with `-- -L <local_port>:localhost:<remote_port>` and `--tunnel-through-iap` flag.
-      YARN ResourceManager UI runs on port **8088**.  
-   Command used for setting up the tunnel:  
-   ```
-   gcloud compute ssh tbd-cluster-m  
-      --zone europe-west1-b  
-      --tunnel-through-iap  
-      -- -L 18088:tbd-cluster-m:8088  
-   Port: 18088  
-   ```
-   Screenshot of YARN UI:  
+      gcloud compute ssh tbd-cluster-m  
+         --zone europe-west1-b  
+         --tunnel-through-iap  
+         -- -L 18088:tbd-cluster-m:8088  
+      Port: 18088  
+      ```
+   - Screenshot of YARN UI:  
    ![YARN UI](task1/6yarm_ui.png)
 
-7. Draw an architecture diagram (e.g. in draw.io) that includes:
-   1. Description of the components of service accounts
-   2. List of buckets for disposal
+# 7. Draw an architecture diagram (e.g. in draw.io) that includes:
+   ## Task
+   > 1. Description of the components of service accounts
+   > 2. List of buckets for disposal
+   >
+   > ***place your diagram here***
 
+   ## Solution
    Diagram:
    ![Architekture diagram](task1/7draw_io.png)
 
-8. Create a new PR and add costs by entering the expected consumption into Infracost
-For all the resources of type: `google_artifact_registry_repository`, `google_storage_bucket`
-create a sample usage profiles and add it to the Infracost task in CI/CD pipeline. Usage file [example](https://github.com/infracost/infracost/blob/master/infracost-usage-example.yml)
+# 8. Create a new PR and add costs by entering the expected consumption into Infracost
+   ## Task
+   > For all the resources of type: `google_artifact_registry_repository`, `google_storage_bucket`
+   > create a sample usage profiles and add it to the Infracost task in CI/CD pipeline. Usage file [example](https://github.com/infracost/infracost/blob/master/infracost-usage-example.yml)
+   >
+   > ***place the expected consumption you entered here***
+   >
+   > ***place the screenshot from infracost output here***
 
-    Expected consumption entered into Infracost usage file:
+   ## Solution
+   - Expected consumption entered into Infracost usage file:
 
       ```yaml
       version: 0.1
@@ -119,30 +125,56 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
             monthly_egress_gb: 1
       ```
 
-      Infracost output:
+   - Infracost output:
       ![infracost_estimade.png](doc/figures/infracost_estimade.png)
 
-9. Find and correct the error in spark-job.py
+# 9. Find and correct the error in spark-job.py
+   ## Task
+   > After `terraform apply` completes, connect to the Airflow cluster:
+   > ```bash
+   > gcloud container clusters get-credentials airflow-cluster --zone europe-west1-b --project PROJECT_NAME
+   > ```
+   > 
+   > Then check the external IP (AIRFLOW_EXTERNAL_IP) of the webserver service:
+   > kubectl get svc -n airflow airflow-webserver                                                                                                                                                                 
+   >                                        
+   >                                                                                                                                                                                                       
+   > ▎ Note: If EXTERNAL-IP shows <pending>, wait a moment and retry — LoadBalancer IP allocation may take 1-2 minutes.  
+   >
+   > DAG files are synced automatically from your GitHub repo via git-sync sidecar.
+   > Airflow variables and the `google_cloud_default` GCP connection are also configured by Terraform.
+   >
+   > a) In the Airflow UI (http://AIRFLOW_EXTERNAL_IP:8080, login: admin/admin), find the `dataproc_job` DAG, unpause it and trigger it manually.
+   >
+   > ***place a screenshot of the DAG in the Airflow UI***
+   >
+   > b) The DAG will fail. Examine the task logs in the Airflow UI to find the root cause.
+   >
+   > ***paste the relevant error message from the Airflow task log***
+   >
+   > ***describe what the error is and how you found it***
+   >
+   > c) Fix the error in `modules/data-pipeline/resources/spark-job.py` and re-upload the file to GCS:
+   > ```bash
+   > gsutil cp modules/data-pipeline/resources/spark-job.py gs://PROJECT_NAME-code/spark-job.py
+   > ```
+   > Then trigger the DAG again from the Airflow UI.
+   >
+   > ***paste the link to the fixed file***
+   >
+   > d) Verify the DAG completes successfully and check that ORC files were written to the data bucket:
+   > ```bash
+   > gsutil ls gs://PROJECT_NAME-data/data/shakespeare/
+   > ```
+   >
+   > ***place a screenshot of the successful DAG run in Airflow UI***
 
-      After `terraform apply` completes, connect to the Airflow cluster:
-      ```bash
-      gcloud container clusters get-credentials airflow-cluster --zone europe-west1-b --project PROJECT_NAME
-      ```
+   ## Solution
+   ### A) DAG trigger
+   ![screenshot of the unsucessful DAG](doc/figures/airflow-ui-error.png)
 
-      Then check the external IP (AIRFLOW_EXTERNAL_IP) of the webserver service:
-      kubectl get svc -n airflow airflow-webserver  
-
-      ▎ Note: If EXTERNAL-IP shows , wait a moment and retry — LoadBalancer IP allocation may take 1-2 minutes.
-
-      DAG files are synced automatically from your GitHub repo via git-sync sidecar.
-      Airflow variables and the `google_cloud_default` GCP connection are also configured by Terraform.
-
-      a) In the Airflow UI ([http://AIRFLOW_EXTERNAL_IP:8080](http://AIRFLOW_EXTERNAL_IP:8080), login: admin/admin), find the `dataproc_job` DAG, unpause it and trigger it manually.
-
-      ![airflow-ui-error.png](doc/figures/airflow-ui-error.png)
-
-      b) The DAG will fail. Examine the task logs in the Airflow UI to find the root cause.
-
+   ### B) DAG examination and error cause 
+   - **Error message from the Airflow task log:**
       ```json
       POST https://storage.googleapis.com/upload/storage/v1/b/tbd-2026l-9010-data/o?ifGenerationMatch=0&uploadType=multipart
       {
@@ -157,36 +189,34 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
       "message": "The specified bucket does not exist."
       }
       ```
+   - **Description of error:**
 
-      The error was caused by writing the output to a non-existing GCS bucket: `tbd-2026l-9010-data`.  
-      I found it by checking the Dataproc driver output log referenced in the Airflow task log. The detailed stack trace showed a `404 Not Found` error with the message `The specified bucket does not exist.`
+      The error was caused by writing the output to a non-existing GCS bucket: `tbd-2026l-9010-data`. found it by checking the Dataproc driver output log referenced in the Airflow task log. The detailed stack trace showed a `404 Not Found` error with the message `The specified bucket does not exist.`
 
-      c) Fix the error in `modules/data-pipeline/resources/spark-job.py` and re-upload the file to GCS:
+   ### C) Link to fixed file
+   [spark-job.py](modules/data-pipeline/resources/spark-job.py)
 
-      ```bash
-      gsutil cp modules/data-pipeline/resources/spark-job.py gs://PROJECT_NAME-code/spark-job.py
-      ```
-      Then trigger the DAG again from the Airflow UI.
+   ### D) Screenshot of the sucessful DAG
 
-      [Fixed spark-job.py file](modules/data-pipeline/resources/spark-job.py)
+   ![Screenshot of the sucessful DAG](doc/figures/airflow-ui-sucess.png)
 
-      d) Verify the DAG completes successfully and check that ORC files were written to the data bucket:
-      ```bash
-      gsutil ls gs://PROJECT_NAME-data/data/shakespeare/
-      ```
+# 10. Create a BigQuery dataset and an external table using SQL
+   ## Task
+   >Using the ORC data produced by the Spark job in task 9, create a BigQuery dataset and an external table.
+   >
+   >Note: the dataset must be created in the same region as the GCS bucket (`europe-west1`), e.g.:
+   >```bash
+   >bq mk --dataset --location=europe-west1 shakespeare
+   >```
+   >
+   >***place the SQL code and query output here***
+   >
+   >***why does ORC not require a table schema?***
 
-      ![sucessfull job](doc/figures/airflow-ui-sucess.png)
+   ## Solution
+   ### SQL code and query output:
 
-11. Create a BigQuery dataset and an external table using SQL
-
-      Using the ORC data produced by the Spark job in task 9, create a BigQuery dataset and an external table.
-
-      Note: the dataset must be created in the same region as the GCS bucket (`europe-west1`), e.g.:
-       ```bash
-      bq mk --dataset --location=europe-west1 shakespeare
-      ```
-
-      Querries used in BigQuery Studio:
+   1. Create dataset:
 
       ```sql
       CREATE SCHEMA IF NOT EXISTS `tbd-2026l-318786.shakespeare`
@@ -194,8 +224,9 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
       location = 'europe-west1'
       );
       ```
-      output: Ten zbiór danych już istnieje.
+      **Output:** The dataset named shakespeare was created.
 
+   2. Create external table
       ```sql
       CREATE OR REPLACE EXTERNAL TABLE `tbd-2026l-318786.shakespeare.shakespeare_orc_ext`
       OPTIONS (
@@ -203,85 +234,118 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
       uris = ['gs://tbd-2026l-318786-data/data/shakespeare/*.orc']
       );
       ```
+      **Output:** Created tbd-2026l-318786.shakespeare.shakespeare_orc_ext
 
-      output: Ta instrukcja spowodowała utworzenie tabeli o nazwie shakespeare_orc_ext.
+   3. Query the external table
 
+      ```sql
+      SELECT * FROM `tbd-2026l-318786.shakespeare.shakespeare_orc_ext` LIMIT 10;
+      ```
+      **Output:**
+      ```text
+      +---------+----------------+
+      | word    | sum_word_count |
+      +---------+----------------+
+      | came    |            321 |
+      | things  |            321 |
+      | tears   |            319 |
+      | state   |            318 |
+      | Servant |            317 |
+      | faith   |            317 |
+      | news    |            315 |
+      | hour    |            315 |
+      | Are     |            315 |
+      | lie     |            315 |
+      +---------+----------------+
+      ```
+   ### Explenation why does ORC not require a table schema
+   ORC is a self-describing file format, which means that schema information such as column names and data types is stored in the file metadata. Because of that, BigQuery can read the schema directly from the ORC files without requiring a manually defined table schema.
 
-      ***why does ORC not require a table schema?***
+# 11. Add support for preemptible/spot instances in a Dataproc cluster
+   ## Task
+   > ***place the link to the modified file and inserted terraform code***
 
-12. Add support for preemptible/spot instances in a Dataproc cluster
-
-    [modules/dataproc/main.tf](modules/dataproc/main.tf)
-    ```terraform
-    preemptible_worker_config {
+   ## Solution
+   - Modified file: [modules/dataproc/main.tf](modules/dataproc/main.tf)
+   - Inserted code:
+      ```terraform
+      preemptible_worker_config {
       num_instances = 1
-    }
-    ```
+      }
+      ```
 
-13. Triggered Terraform Destroy on Schedule or After PR Merge. Goal: make sure we never forget to clean up resources and burn money.
+# 12. Triggered Terraform Destroy on Schedule or After PR Merge. Goal: make sure we never forget to clean up resources and burn money.
+   ## Task
+   > Add a new GitHub Actions workflow that:
+   > 1. runs terraform destroy -auto-approve
+   > 2. triggers automatically:
+   >
+   > a) on a fixed schedule (e.g. every day at 20:00 UTC)
+   >
+   > b) when a PR is merged to master containing [CLEANUP] tag in title
+   >
+   > Steps:
+   > 1. Create file .github/workflows/auto-destroy.yml
+   > 2. Configure it to authenticate and destroy Terraform resources
+   > 3. Test the trigger (schedule or cleanup-tagged PR)
+   >
+   > Hint: use the existing `.github/workflows/destroy.yml` as a starting point.
+   >
+   > ***paste workflow YAML here***
+   >
+   > ***paste screenshot/log snippet confirming the auto-destroy ran***
+   >
+   > ***write one sentence why scheduling cleanup helps in this workshop***
 
-   Add a new GitHub Actions workflow that:
-      1. runs terraform destroy -auto-approve
-      2. triggers automatically:
+   ## Solution
 
-         a) on a fixed schedule (e.g. every day at 20:00 UTC)
+   ### 1. Workflow YAML
+   ```yaml
+   name: Auto Destroy
+   on:
+   schedule:
+      - cron: '0 20 * * *'
+   pull_request:
+      types: [closed]
+      branches:
+         - master
 
-         b) when a PR is merged to master containing [CLEANUP] tag in title
+   permissions: read-all
 
-Steps:
-   1. Create file .github/workflows/auto-destroy.yml
-   2. Configure it to authenticate and destroy Terraform resources
-   3. Test the trigger (schedule or cleanup-tagged PR)
+   jobs:
+   destroy-release:
+      if: github.event_name == 'schedule' || (github.event.pull_request.merged == true && contains(github.event.pull_request.title, '[CLEANUP]'))
+      runs-on: ubuntu-latest
+      permissions:
+         contents: write
+         id-token: write
+         pull-requests: write
+         issues: write
 
-Hint: use the existing `.github/workflows/destroy.yml` as a starting point.
-
-***paste workflow YAML here***
-```yaml
-name: Auto Destroy
-on:
-  schedule:
-    - cron: '0 20 * * *'
-  pull_request:
-    types: [closed]
-    branches:
-      - master
-
-permissions: read-all
-
-jobs:
-  destroy-release:
-    if: github.event_name == 'schedule' || (github.event.pull_request.merged == true && contains(github.event.pull_request.title, '[CLEANUP]'))
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
-      pull-requests: write
-      issues: write
-
-    steps:
-    - uses: 'actions/checkout@v3'
-    - uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.11.0
-    - id: 'auth'
-      name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v1'
-      with:
-        token_format: 'access_token'
-        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
-        service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
-    - name: Terraform Init
-      id: init
-      run: terraform init -backend-config=env/backend.tfvars
-    - name: Terraform Destroy
-      id: destroy
-      run: terraform destroy -no-color -var-file env/project.tfvars -auto-approve
-      continue-on-error: false
-```
+      steps:
+      - uses: 'actions/checkout@v3'
+      - uses: hashicorp/setup-terraform@v2
+         with:
+         terraform_version: 1.11.0
+      - id: 'auth'
+         name: 'Authenticate to Google Cloud'
+         uses: 'google-github-actions/auth@v1'
+         with:
+         token_format: 'access_token'
+         workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
+         service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
+      - name: Terraform Init
+         id: init
+         run: terraform init -backend-config=env/backend.tfvars
+      - name: Terraform Destroy
+         id: destroy
+         run: terraform destroy -no-color -var-file env/project.tfvars -auto-approve
+         continue-on-error: false
+   ```
 
 
-***paste screenshot/log snippet confirming the auto-destroy ran***
-![Auto Destroy Success](doc/figures/auto-destroy-success.png)
+   ### 2. Auto Destroy run:
+   ![Auto Destroy Success](doc/figures/auto-destroy-success.png)
 
-***write one sentence why scheduling cleanup helps in this workshop***
-Ustawienie harmonogramu czyszczenia zasobów (auto-destroy) chroni nas przed nieświadomym generowaniem bardzo wysokich i niepotrzebnych kosztów w Google Cloud w przypadku, gdybyśmy sami po zakończeniu pracy zapomnieli ręcznie wyłączyć utworzoną infrastrukturę.
+   ### 3. Explenation why cheduling cleanup helps in this workshop:
+   Ustawienie harmonogramu czyszczenia zasobów (auto-destroy) chroni nas przed nieświadomym generowaniem bardzo wysokich i niepotrzebnych kosztów w Google Cloud w przypadku, gdybyśmy sami po zakończeniu pracy zapomnieli ręcznie wyłączyć utworzoną infrastrukturę.
