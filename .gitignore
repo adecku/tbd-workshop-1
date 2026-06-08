@@ -38,3 +38,7 @@ terraform.rc
 .DS_Store
 bootstrap/terraform.tfstate_*
 bin/
+
+data/
+
+.venv/
